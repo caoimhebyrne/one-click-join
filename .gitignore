@@ -1,0 +1,9 @@
+**/.gradle
+**/.idea
+
+**/build/
+**/out/
+**/run
+
+.DS_Store
+*.hprof
