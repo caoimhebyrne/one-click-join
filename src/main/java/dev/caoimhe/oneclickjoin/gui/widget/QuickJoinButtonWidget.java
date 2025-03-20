@@ -16,6 +16,8 @@ import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
 
 public class QuickJoinButtonWidget extends ButtonWidget {
+    private static final int DEFAULT_X = 5;
+    private static final int DEFAULT_Y = 5;
     private static final int WIDTH = 20;
     private static final int HEIGHT = 20;
     private static final int IMAGE_PADDING = 2;
@@ -25,8 +27,8 @@ public class QuickJoinButtonWidget extends ButtonWidget {
 
     public QuickJoinButtonWidget(final @Nullable ButtonWidget neighbor, final @Nullable ServerInfo serverInfo) {
         super(
-            5,
-            5,
+            DEFAULT_X,
+            DEFAULT_Y,
             WIDTH,
             HEIGHT,
             Text.empty(),
@@ -80,7 +82,7 @@ public class QuickJoinButtonWidget extends ButtonWidget {
             return this.neighbor.getX() + this.neighbor.getWidth() + 4;
         }
 
-        return 5;
+        return DEFAULT_X;
     }
 
     @Override
@@ -89,7 +91,7 @@ public class QuickJoinButtonWidget extends ButtonWidget {
             return this.neighbor.getY();
         }
 
-        return 5;
+        return DEFAULT_Y;
     }
 
     @Override
