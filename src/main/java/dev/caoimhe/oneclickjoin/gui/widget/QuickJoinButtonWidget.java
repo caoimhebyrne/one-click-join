@@ -102,14 +102,14 @@ public class QuickJoinButtonWidget extends ButtonWidget {
                 RenderLayer::getGuiTextured,
                 //#endif
                 this.worldIcon.getTextureId(),
-                this.getX() - (IMAGE_PADDING / 2),
-                this.getY() - (IMAGE_PADDING / 2),
+                this.getX() + (IMAGE_PADDING / 2),
+                this.getY() + (IMAGE_PADDING / 2),
                 /* u */ 0,
                 /* v */ 0,
                 WIDTH - IMAGE_PADDING,
                 HEIGHT - IMAGE_PADDING,
-                WIDTH,
-                HEIGHT
+                WIDTH - IMAGE_PADDING,
+                HEIGHT - IMAGE_PADDING
             );
         }
     }
