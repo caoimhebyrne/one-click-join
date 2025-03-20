@@ -3,6 +3,12 @@ plugins {
     id("gg.essential.multi-version")
 }
 
+fun Project.dependencyVersion(name: String, friendlyName: String = name, defaultValue: String? = null): String {
+    return this.findProperty("dependency.$name.version") as? String
+        ?: defaultValue
+        ?: error("No $friendlyName version defined for ${platform.mcVersionStr} (${platform.loaderStr})")
+}
+
 group = "dev.caoimhe"
 version = "1.0.0-alpha.1"
 base.archivesName = "one-click-join-${project.name}"
@@ -14,22 +20,12 @@ repositories {
 
 dependencies {
     // Only used in the development environment for authentication.
-    modRuntimeOnly("me.djtheredstoner:DevAuth-${platform.loaderStr}:1.2.1")
+    val devAuthVersion = dependencyVersion("devauth", "DevAuth")
+    modRuntimeOnly("me.djtheredstoner:DevAuth-${platform.loaderStr}:$devAuthVersion")
 
     if (platform.isFabric) {
-        // TODO: Add a property to each version's project that defines these versions.
-        //       e.g. `dependency.modmenu.version`, `dependency.fabric-api.version`, etc.
-        val modMenuVersion = when (platform.mcVersion) {
-            12101 -> "11.0.3"
-            12102 -> "12.0.0"
-            else -> error("No ModMenu version defined for ${platform.mcVersionStr}")
-        }
-
-        val fabricApiVersion = when (platform.mcVersion) {
-            12101 -> "0.115.3+1.21.1"
-            12102 -> "0.106.1+1.21.2"
-            else -> error("No Fabric API version defined for ${platform.mcVersionStr}")
-        }
+        val modMenuVersion = dependencyVersion("modmenu", "ModMenu")
+        val fabricApiVersion = dependencyVersion("fabric-api", "Fabric API")
 
         modRuntimeOnly("com.terraformersmc:modmenu:$modMenuVersion")
         modImplementation("net.fabricmc.fabric-api:fabric-api:$fabricApiVersion")
