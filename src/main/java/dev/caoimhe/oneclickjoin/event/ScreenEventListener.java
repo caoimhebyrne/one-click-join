@@ -12,8 +12,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.function.Consumer;
 
 /**
- * Called by the platform's screen events API.
- * Responsible for adding the quick join button to the main menu.
+ * Called by the platform's screen events API. Responsible for adding the quick join button to the main menu.
  *
  * @see OneClickJoin
  */
