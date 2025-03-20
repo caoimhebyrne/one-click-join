@@ -1,0 +1,31 @@
+{
+    "schemaVersion": 1,
+    "id": "one-click-join",
+    "version": "${version}",
+    "name": "One Click Join",
+    "description": "Instantly join your last Minecraft server from the main menu!",
+    "authors": [
+        "Caoimhe Byrne"
+    ],
+    "contact": {
+        "sources": "https://github.com/caoimhebyrne/one-click-join",
+        "issues": "https://github.com/caoimhebyrne/one-click-join/issues"
+    },
+    "license": "MIT",
+    "icon": "assets/one-click-join/icon.png",
+    "environment": "*",
+    "entrypoints": {
+        "client": [
+            "dev.caoimhe.oneclickjoin.OneClickJoin"
+        ]
+    },
+    "mixins": [
+        "one-click-join.mixins.json"
+    ],
+    "depends": {
+        "fabricloader": ">=0.16.0",
+        "minecraft": "${mcVersionStr}",
+        "java": ">=21",
+        "fabric-api": "*"
+    }
+}

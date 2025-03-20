@@ -1,0 +1,32 @@
+modLoader = "javafml"
+loaderVersion = "[1,)"
+license = "MIT"
+issueTrackerURL = "https://github.com/caoimhebyrne/one-click-join/issues"
+
+[[mods]]
+modId = "one_click_join"
+version = "${version}"
+displayName = "One Click Join"
+logoFile = "assets/one-click-join/icon.png"
+authors = "Caoimhe Byrne"
+credits = "Caoimhe Byrne"
+description = '''
+Instantly join your last Minecraft server from the main menu!
+'''
+
+[[mixins]]
+config = "one-click-join.mixins.json"
+
+[[dependencies.one_click_join]]
+modId = "neoforge"
+type = "required"
+versionRange = "[21.1,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.one_click_join]]
+modId = "minecraft"
+type = "required"
+versionRange = "[${mcVersionStr},)"
+ordering = "NONE"
+side = "BOTH"
