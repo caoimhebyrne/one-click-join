@@ -17,10 +17,11 @@ Minecraft versions 1.21.1 and higher are supported on both Fabric and NeoForge. 
 supported in the future if there is demand for them! <sub>(no, there will not be a Forge
 port)</sb>
 
-This project uses
-to [ReplayMod/preprocessor](https://github.com/ReplayMod/preprocessor/) to support multiple Minecraft versions
-and [EssentialGG/essential-gradle-toolkit](https://github.com/essentialgg/essential-gradle-toolkit) to make it all
-easier to set-up.
+This project uses to [ReplayMod/preprocessor](https://github.com/ReplayMod/preprocessor/) to support multiple Minecraft
+versions and [EssentialGG/essential-gradle-toolkit](https://github.com/essentialgg/essential-gradle-toolkit) to make it
+all easier to set up.
+
+![A screenshot showing the button on the main menu, beside the multiplayer button, with the text 'Join server Hypixel'](.github/images/screenshot.png)
 
 ## License
 
