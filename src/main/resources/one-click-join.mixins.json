@@ -3,6 +3,7 @@
     "package": "dev.caoimhe.oneclickjoin.mixin",
     "compatibilityLevel": "JAVA_21",
     "client": [
+        "ServerListAccessor"
     ],
     "injectors": {
         "defaultRequire": 1
