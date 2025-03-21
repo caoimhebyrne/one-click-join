@@ -48,3 +48,14 @@ loom {
         }
     }
 }
+
+
+tasks {
+    jar {
+        // This gradle script is evaluated for each `./version/{id}`, in order to get the LICENSE file, we need to
+        // resolve it from the root project, not the version's root.
+        from(rootProject.file("LICENSE")) {
+            rename { "one-click-join_${it}" }
+        }
+    }
+}
