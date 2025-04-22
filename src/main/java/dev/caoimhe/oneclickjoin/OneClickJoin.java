@@ -2,7 +2,9 @@ package dev.caoimhe.oneclickjoin;
 
 // @formatter:off
 //#if NEOFORGE
+//$$ import net.neoforged.bus.api.IEventBus;
 //$$ import net.neoforged.fml.common.Mod;
+//$$ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 //$$ import net.neoforged.neoforge.client.event.ClientPlayerNetworkEvent;
 //$$ import net.neoforged.neoforge.client.event.ScreenEvent;
 //$$ import net.neoforged.neoforge.common.NeoForge;
@@ -31,13 +33,20 @@ public class OneClickJoin implements ClientModInitializer {
     private final ServerEventListener serverEventListener = new ServerEventListener();
 
     //#if NEOFORGE
-    //$$ public OneClickJoin() {
+    //$$ public OneClickJoin(IEventBus modEventBus) {
     //$$     NeoForge.EVENT_BUS.addListener(ScreenEvent.Init.Post.class, (event) -> {
     //$$         this.screenEventListener.afterScreenInitialized(event.getScreen(), event::addListener);
     //$$     });
     //$$
     //$$     NeoForge.EVENT_BUS.addListener(ClientPlayerNetworkEvent.LoggingIn.class, (event) -> {
     //$$         this.serverEventListener.onServerJoin();
+    //$$     });
+    //$$
+    //$$     // NeoForge made mods load earlier in 1.21.5: https://neoforged.net/news/21.5release/#client-mod-initialization
+    //$$     // Even though older versions can still access the `Minecraft` instance in a mod's constructor, we don't
+    //$$     // *really* need to access it that early, so we can use the `FMLClientSetupEvent` on all versions.
+    //$$     modEventBus.addListener(FMLClientSetupEvent.class, (event) -> {
+    //$$         OneClickJoinConfig.INSTANCE.load();
     //$$     });
     //#elseif FABRIC
     @Override
@@ -49,8 +58,8 @@ public class OneClickJoin implements ClientModInitializer {
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {
             this.serverEventListener.onServerJoin();
         });
-        //#endif
 
         OneClickJoinConfig.INSTANCE.load();
+        //#endif
     }
 }
