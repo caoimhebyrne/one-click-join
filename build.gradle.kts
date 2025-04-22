@@ -10,7 +10,7 @@ fun Project.dependencyVersion(name: String, friendlyName: String = name, default
 }
 
 group = "dev.caoimhe"
-version = "1.0.1-alpha.1"
+version = "1.0.1"
 base.archivesName = "one-click-join-${project.name}"
 
 repositories {
