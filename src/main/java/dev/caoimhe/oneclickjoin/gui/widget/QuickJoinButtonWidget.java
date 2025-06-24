@@ -2,6 +2,9 @@ package dev.caoimhe.oneclickjoin.gui.widget;
 
 import dev.caoimhe.oneclickjoin.OneClickJoin;
 import net.minecraft.client.MinecraftClient;
+//#if MC>=12106
+import net.minecraft.client.gl.RenderPipelines;
+//#endif
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
@@ -10,7 +13,9 @@ import net.minecraft.client.gui.tooltip.Tooltip;
 import net.minecraft.client.gui.widget.ButtonWidget;
 import net.minecraft.client.network.ServerAddress;
 import net.minecraft.client.network.ServerInfo;
-import net.minecraft.client.render.RenderLayer;
+//#if MC>=12102 && MC <12106
+//$$ import net.minecraft.client.renderer.RenderType;
+//#endif
 import net.minecraft.client.texture.NativeImage;
 import net.minecraft.text.Text;
 import org.jetbrains.annotations.Nullable;
@@ -100,8 +105,10 @@ public class QuickJoinButtonWidget extends ButtonWidget {
 
         if (this.worldIcon != null) {
             context.drawTexture(
-                //#if MC>=12102
-                RenderLayer::getGuiTextured,
+                //#if MC>=12106
+                RenderPipelines.GUI_TEXTURED,
+                //#elseif MC>=12102
+                //$$ RenderType::guiTextured,
                 //#endif
                 this.worldIcon.getTextureId(),
                 this.getX() + (IMAGE_PADDING / 2),
