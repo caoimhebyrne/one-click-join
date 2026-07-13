@@ -16,6 +16,10 @@ base.archivesName = "one-click-join-${project.name}"
 repositories {
     maven("https://pkgs.dev.azure.com/djtheredstoner/DevAuth/_packaging/public/maven/v1")
     maven("https://maven.terraformersmc.com")
+
+    // Loom (or some side effect of the preprocessor plugin) causes NeoForge dependencies to be resolved from within,
+    // Fabric subprojects so every subproject needs access to the NeoForged maven.
+    maven("https://maven.neoforged.net/releases")
 }
 
 dependencies {

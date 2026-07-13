@@ -1,6 +1,5 @@
 // https://github.com/EssentialGG/essential-gradle-toolkit
 plugins {
-    id("gg.essential.loom") version "1.7.28" apply false
     id("gg.essential.multi-version.root")
 }
 
