@@ -36,7 +36,12 @@ public class QuickJoinButtonWidget extends ButtonWidget {
             DEFAULT_Y,
             WIDTH,
             HEIGHT,
-            Text.empty(),
+            //#if MC>=12111
+            //$$ net.minecraft.text.Text
+            //#else
+            Text
+            //#endif
+                .empty(),
             (widget) -> {
                 if (serverInfo == null) {
                     return;
@@ -58,7 +63,14 @@ public class QuickJoinButtonWidget extends ButtonWidget {
 
         if (serverInfo != null) {
             this.worldIcon = WorldIcon.forServer(MinecraftClient.getInstance().getTextureManager(), serverInfo.address);
-            this.setTooltip(Tooltip.of(Text.literal("Join server " + serverInfo.name + "...")));
+            this.setTooltip(Tooltip.of(
+                //#if MC>=12111
+                //$$ net.minecraft.text.Text
+                //#else
+                Text
+                //#endif
+                    .literal("Join server " + serverInfo.name + "..."))
+            );
 
             final byte[] bytes = serverInfo.getFavicon();
             if (bytes != null && bytes.length > 0) {
@@ -71,7 +83,14 @@ public class QuickJoinButtonWidget extends ButtonWidget {
         } else {
             this.worldIcon = null;
             this.active = false;
-            this.setTooltip(Tooltip.of(Text.literal("Join a server to be able to quick-join!")));
+            this.setTooltip(Tooltip.of(
+                //#if MC>=12111
+                //$$ net.minecraft.text.Text
+                //#else
+                Text
+                //#endif
+                    .literal("Join a server to be able to quick-join!")
+            ));
         }
     }
 
@@ -99,9 +118,15 @@ public class QuickJoinButtonWidget extends ButtonWidget {
         return DEFAULT_Y;
     }
 
+
     @Override
+    //#if MC>=12111
+    //$$ protected void drawIcon(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+    //$$     this.drawButton(context);
+    //#else
     protected void renderWidget(DrawContext context, int mouseX, int mouseY, float delta) {
         super.renderWidget(context, mouseX, mouseY, delta);
+    //#endif
 
         if (this.worldIcon != null) {
             context.drawTexture(
