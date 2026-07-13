@@ -37,8 +37,9 @@ dependencies {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_21
-    targetCompatibility = JavaVersion.VERSION_21
+    val javaVersion = if (platform.mcVersion >= 260100) JavaVersion.VERSION_25 else JavaVersion.VERSION_21
+    sourceCompatibility = javaVersion
+    targetCompatibility = javaVersion
 }
 
 loom {
