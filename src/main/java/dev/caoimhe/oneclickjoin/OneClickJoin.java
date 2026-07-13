@@ -13,6 +13,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.fabricmc.fabric.api.client.screen.v1.ScreenEvents;
 import net.fabricmc.fabric.api.client.screen.v1.Screens;
+//#if MC>=260100
+//$$ import net.minecraft.client.gui.components.AbstractWidget;
+//#else
+import net.minecraft.client.gui.widget.ClickableWidget;
+//#endif
 //#endif
 
 import com.mojang.logging.LogUtils;
@@ -20,6 +25,7 @@ import dev.caoimhe.oneclickjoin.config.OneClickJoinConfig;
 import dev.caoimhe.oneclickjoin.event.ScreenEventListener;
 import dev.caoimhe.oneclickjoin.event.ServerEventListener;
 import org.slf4j.Logger;
+import java.util.function.Consumer;
 
 //#if NEOFORGE
 //$$ @Mod("one_click_join")
@@ -52,7 +58,13 @@ public class OneClickJoin implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         ScreenEvents.AFTER_INIT.register(((client, screen, scaledWidth, scaledHeight) -> {
-            this.screenEventListener.afterScreenInitialized(screen, Screens.getButtons(screen)::add);
+            //#if MC>=260100
+            //$$ final Consumer<AbstractWidget> addClickableWidget = Screens.getWidgets(screen)::add;
+            //#else
+            final Consumer<ClickableWidget> addClickableWidget = Screens.getButtons(screen)::add;
+            //#endif
+
+            this.screenEventListener.afterScreenInitialized(screen, addClickableWidget);
         }));
 
         ClientPlayConnectionEvents.JOIN.register((handler, sender, client) -> {

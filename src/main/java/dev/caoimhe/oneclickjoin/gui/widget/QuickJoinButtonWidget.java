@@ -5,7 +5,11 @@ import net.minecraft.client.MinecraftClient;
 //#if MC>=12106
 import net.minecraft.client.gl.RenderPipelines;
 //#endif
+//#if MC>=260100
+//$$ import net.minecraft.client.gui.GuiGraphicsExtractor;
+//#else
 import net.minecraft.client.gui.DrawContext;
+//#endif
 import net.minecraft.client.gui.screen.TitleScreen;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
 import net.minecraft.client.gui.screen.world.WorldIcon;
@@ -120,7 +124,10 @@ public class QuickJoinButtonWidget extends ButtonWidget {
 
 
     @Override
-    //#if MC>=12111
+    //#if MC>=260100
+    //$$ protected void extractContents(GuiGraphicsExtractor context, int mouseX, int mouseY, float deltaTicks) {
+    //$$     this.extractDefaultSprite(context);
+    //#elseif MC>=12111
     //$$ protected void drawIcon(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
     //$$     this.drawButton(context);
     //#else
