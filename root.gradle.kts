@@ -4,6 +4,8 @@ plugins {
 }
 
 preprocess {
+    val fabric260300 = createNode("26.3-fabric", 260300, "official")
+    val neoforge260300 = createNode("26.3-neoforge", 260300, "official")
     val neoforge260100 = createNode("26.1-neoforge", 260100, "official")
     val fabric260100 = createNode("26.1-fabric", 260100, "official")
     val neoforge12111 = createNode("1.21.11-neoforge", 12111, "official")
@@ -15,6 +17,8 @@ preprocess {
     val neoforge12101 = createNode("1.21.1-neoforge", 12101, "official")
     val fabric12101 = createNode("1.21.1-fabric", 12101, "yarn")
 
+    fabric260300.link(neoforge260300)
+    neoforge260300.link(neoforge260100)
     neoforge260100.link(fabric260100)  // NeoForge 26.1    -> Fabric 26.1
     fabric260100.link(neoforge12111)   // Fabric 26.1      -> NeoForge 1.21.11
     neoforge12111.link(fabric12111)    // NeoForge 1.21.11 -> Fabric 1.21.11

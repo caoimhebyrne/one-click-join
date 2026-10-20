@@ -9,7 +9,7 @@ pluginManagement {
     }
 
     plugins {
-        val egtVersion = "0.7.2"
+        val egtVersion = "0.7.3"
         id("gg.essential.multi-version.root") version egtVersion
     }
 }
@@ -31,6 +31,8 @@ listOf(
     "1.21.11-neoforge",
     "26.1-fabric",
     "26.1-neoforge",
+    "26.3-fabric",
+    "26.3-neoforge",
 ).forEach { version ->
     include(":$version")
     project(":$version").apply {
