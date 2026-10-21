@@ -2,6 +2,7 @@ package dev.caoimhe.oneclickjoin;
 
 // @formatter:off
 //#if NEOFORGE
+//$$ import net.neoforged.api.distmarker.Dist;
 //$$ import net.neoforged.bus.api.IEventBus;
 //$$ import net.neoforged.fml.common.Mod;
 //$$ import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
@@ -28,7 +29,7 @@ import org.slf4j.Logger;
 import java.util.function.Consumer;
 
 //#if NEOFORGE
-//$$ @Mod("one_click_join")
+//$$ @Mod(value = "one_click_join", dist = Dist.CLIENT)
 //$$ public class OneClickJoin {
 //#elseif FABRIC
 public class OneClickJoin implements ClientModInitializer {

@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - '*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Validate release notes
+        run: |
+          if ! grep -q '[^[:space:]]' release-notes.md; then
+            echo "::error::release-notes.md must contain release notes."
+            exit 1
+          fi
+
+      - name: Setup build
+        uses: ./.github/actions/setup-build
+
+      - name: Validate release tag
+        if: github.event_name == 'push'
+        env:
+          RELEASE_TAG: ${{ github.ref_name }}
+        run: |
+          version="$(./gradlew :1.21.6-fabric:properties --property version --quiet --console=plain | sed -n 's/^version: //p')"
+          if [[ -z "$version" || "$RELEASE_TAG" != "$version" ]]; then
+            echo "::error::Release tag '$RELEASE_TAG' must match the Gradle version '$version'."
+            exit 1
+          fi
+
+      - name: Build and preview all releases
+        run: ./gradlew build publishMods -Ppublishing.disable-dry-run=false
+
+      - name: Upload release artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: release-artifacts
+          path: versions/*/build/publishMods/publishModrinth/*.jar
+          if-no-files-found: error
+
+      - name: Publish
+        if: github.event_name == 'push'
+        env:
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: ./gradlew publishMods -Ppublishing.disable-dry-run=true

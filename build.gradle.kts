@@ -1,6 +1,12 @@
+import me.modmuss50.mpp.ReleaseType
+import me.modmuss50.mpp.platforms.modrinth.ModrinthEnvironment
+import net.fabricmc.loom.task.RemapJarTask
+import org.gradle.api.artifacts.Configuration
+
 plugins {
     id("gg.essential.defaults")
     id("gg.essential.multi-version")
+    id("me.modmuss50.mod-publish-plugin")
 }
 
 fun Project.dependencyVersion(name: String, friendlyName: String = name, defaultValue: String? = null): String {
@@ -9,8 +15,13 @@ fun Project.dependencyVersion(name: String, friendlyName: String = name, default
         ?: error("No $friendlyName version defined for ${platform.mcVersionStr} (${platform.loaderStr})")
 }
 
+fun Configuration.dependencyVersion(group: String, name: String): String {
+    return dependencies.single { it.group == group && it.name == name }.version
+        ?: error("No version defined for $group:$name in configuration ${this@dependencyVersion.name}")
+}
+
 group = "dev.caoimhe"
-version = "1.3.0"
+version = "1.3.1"
 base.archivesName = "one-click-join-${project.name}"
 
 repositories {
@@ -36,24 +47,12 @@ dependencies {
     }
 }
 
+val javaVersion = if (platform.mcVersion >= 260100) JavaVersion.VERSION_25 else JavaVersion.VERSION_21
+
 java {
-    val javaVersion = if (platform.mcVersion >= 260100) JavaVersion.VERSION_25 else JavaVersion.VERSION_21
     sourceCompatibility = javaVersion
     targetCompatibility = javaVersion
 }
-
-loom {
-    runConfigs {
-        remove(named("server").get())
-
-        // The Nvidia drivers on Fedora Linux are broken, this fixes the issue of the game hanging upon exit for me,
-        // if this causes issues in the future it can be removed, but it's nicer to have it defined here for now.
-        named("client") {
-            environmentVariable("__GL_THREADED_OPTIMIZATIONS", 0)
-        }
-    }
-}
-
 
 tasks {
     jar {
@@ -63,4 +62,78 @@ tasks {
             rename { "one-click-join_${it}" }
         }
     }
+}
+
+val finalJarTask = if (platform.isUnobfuscated) {
+    tasks.jar
+} else {
+    tasks.named<RemapJarTask>("remapJar")
+}
+
+val supportedMinecraftVersions = buildSet {
+    add(platform.mcVersionStr)
+
+    val extraMinecraftVersions = project.findProperty("dev.caoimhe.extra-minecraft-versions") as? String
+        ?: return@buildSet
+
+    addAll(extraMinecraftVersions.split(",").map { it.trim() }.filter { it.isNotEmpty() })
+}
+
+val commonResourceProperties = mapOf(
+    "version" to project.version.toString(),
+    "java_version" to javaVersion.majorVersion
+)
+
+val loaderResourceProperties = when {
+    platform.isFabric -> {
+        val fabricLoaderVersion = configurations["modImplementation"].dependencyVersion("net.fabricmc", "fabric-loader")
+        mapOf(
+            "fabric_loader_version" to fabricLoaderVersion,
+            "minecraft_versions_array" to supportedMinecraftVersions.joinToString(",", "[", "]") { "\"$it\"" }
+        )
+    }
+
+    platform.isNeoForge -> {
+        val neoForgeVersion = configurations["neoForge"].dependencyVersion("net.neoforged", "neoforge")
+        mapOf(
+            "neoforge_version_range" to "[$neoForgeVersion,)",
+            // NeoForge uses a union of singleton Maven ranges, not a list of versions.
+            "minecraft_versions_range" to supportedMinecraftVersions.joinToString(",") { "[$it]" }
+        )
+    }
+
+    else -> error("Unsupported loader: ${platform.loaderStr}")
+}
+
+val resourceProperties = commonResourceProperties + loaderResourceProperties
+
+tasks {
+    processResources {
+        inputs.properties(resourceProperties)
+
+        filesMatching(listOf("fabric.mod.json", "META-INF/neoforge.mods.toml")) {
+            expand(resourceProperties)
+        }
+    }
+}
+
+publishMods {
+    type = ReleaseType.STABLE
+    displayName = version
+    changelog = providers.fileContents(rootProject.layout.projectDirectory.file("release-notes.md")).asText
+    modLoaders = listOf(platform.loaderStr)
+    dryRun = providers.gradleProperty("publishing.disable-dry-run").orNull != "true"
+
+    modrinth {
+        projectId = "gmVdcG6g"
+        accessToken = providers.environmentVariable("MODRINTH_TOKEN")
+        minecraftVersions = supportedMinecraftVersions
+        environment = ModrinthEnvironment.CLIENT_ONLY
+
+        if (platform.isFabric) {
+            requires("fabric-api")
+        }
+    }
+
+    file = finalJarTask.get().archiveFile
 }

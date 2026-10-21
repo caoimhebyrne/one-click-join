@@ -5,15 +5,16 @@
     "name": "One Click Join",
     "description": "Instantly join your last Minecraft server from the main menu!",
     "authors": [
-        "Caoimhe Byrne"
+        "Caoimhe"
     ],
     "contact": {
+        "homepage": "https://modrinth.com/mod/one-click-join",
         "sources": "https://github.com/caoimhebyrne/one-click-join",
         "issues": "https://github.com/caoimhebyrne/one-click-join/issues"
     },
     "license": "MIT",
     "icon": "assets/one-click-join/icon.png",
-    "environment": "*",
+    "environment": "client",
     "entrypoints": {
         "client": [
             "dev.caoimhe.oneclickjoin.OneClickJoin"
@@ -23,16 +24,9 @@
         "one-click-join.mixins.json"
     ],
     "depends": {
-        "fabricloader": ">=0.16.0",
-        "minecraft": ">=${mcVersionStr}",
-        "java": ">=21",
+        "fabricloader": ">=${fabric_loader_version}",
+        "minecraft": $minecraft_versions_array,
+        "java": ">=${java_version}",
         "fabric-api": "*"
-    },
-    "custom": {
-        "modmenu": {
-            "links": {
-                "modmenu.discord": "https://discord.com/invite/YshqVw45FS"
-            }
-        }
     }
 }

@@ -1,0 +1,1 @@
+- Updated Minecraft dependency version constraints to accurately represent version support

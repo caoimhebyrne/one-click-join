@@ -7,12 +7,17 @@ issueTrackerURL = "https://github.com/caoimhebyrne/one-click-join/issues"
 modId = "one_click_join"
 version = "${version}"
 displayName = "One Click Join"
+displayURL = "https://modrinth.com/mod/one-click-join"
 logoFile = "assets/one-click-join/icon.png"
-authors = "Caoimhe Byrne"
-credits = "Caoimhe Byrne"
+iconFile = "assets/one-click-join/icon.png"
+authors = "Caoimhe"
+credits = "Caoimhe"
 description = '''
 Instantly join your last Minecraft server from the main menu!
 '''
+
+[features.one_click_join]
+javaVersion = "[${java_version},)"
 
 [[mixins]]
 config = "one-click-join.mixins.json"
@@ -20,13 +25,13 @@ config = "one-click-join.mixins.json"
 [[dependencies.one_click_join]]
 modId = "neoforge"
 type = "required"
-versionRange = "[21.1,)"
+versionRange = "${neoforge_version_range}"
 ordering = "NONE"
 side = "BOTH"
 
 [[dependencies.one_click_join]]
 modId = "minecraft"
 type = "required"
-versionRange = "[${mcVersionStr},)"
+versionRange = "${minecraft_versions_range}"
 ordering = "NONE"
 side = "BOTH"

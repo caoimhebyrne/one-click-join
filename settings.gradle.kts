@@ -9,8 +9,8 @@ pluginManagement {
     }
 
     plugins {
-        val egtVersion = "0.7.3"
-        id("gg.essential.multi-version.root") version egtVersion
+        id("gg.essential.multi-version.root") version "0.7.3"
+        id("me.modmuss50.mod-publish-plugin") version "2.2.1"
     }
 }
 
